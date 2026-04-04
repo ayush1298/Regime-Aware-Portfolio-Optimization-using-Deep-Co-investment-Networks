@@ -39,7 +39,7 @@ EXPECTED_REGIMES = {
 def run():
     features_path = os.path.join(project_root, 'outputs', 'features', 'topology_features.csv')
     df = pd.read_csv(features_path)
-    X = df.drop('year', axis=1)
+    X = df[['density', 'avg_path_length', 'assortativity']]
     
     # Step 2.1 - Normalize
     scaler = StandardScaler()

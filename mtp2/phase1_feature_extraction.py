@@ -34,11 +34,18 @@ def extract_features(g):
     top10_degree = sum(sorted_degrees[:10])
     hub_concentration = top10_degree / total_degree if total_degree > 0 else 0
     
-    # Feature 5: degree entropy
+    # Feature 5: assortativity
+    try:
+        assortativity = nx.degree_pearson_correlation_coefficient(g)
+        if np.isnan(assortativity): assortativity = 0
+    except:
+        assortativity = 0
+        
+    # Feature 6: degree entropy
     degree_sequence = np.array(sorted_degrees)
     degree_entropy = entropy(degree_sequence + 1e-10)  # add epsilon to avoid log(0)
     
-    return [density, avg_clustering, avg_path_length, hub_concentration, degree_entropy]
+    return [density, avg_clustering, avg_path_length, hub_concentration, assortativity, degree_entropy]
 
 def run():
     rows = []
@@ -51,7 +58,7 @@ def run():
             print(f"Error processing year {year}: {e}")
     
     df = pd.DataFrame(rows, columns=['year', 'density', 'avg_clustering', 
-                                      'avg_path_length', 'hub_concentration', 'degree_entropy'])
+                                      'avg_path_length', 'hub_concentration', 'assortativity', 'degree_entropy'])
     
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     out_dir = os.path.join(project_root, 'outputs', 'features')
