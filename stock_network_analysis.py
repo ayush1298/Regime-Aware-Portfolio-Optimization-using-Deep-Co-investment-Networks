@@ -343,11 +343,11 @@ class Experimental_platform:
         # FIXED: Use actual_ticker_num from datatool
         actual_num = self.datatool.actual_ticker_num
         for k in range(0, int(actual_num * (actual_num - 1) * 0.5 * rare_ratio)):
-            if W[k].cpu().data.numpy() > 0:
-                (i, j) = self.datatool.check_dyadic(E[k].cpu().data.numpy())
+            if W[k].item() > 0:
+                (i, j) = self.datatool.check_dyadic(E[k].item())
                 i = self.datatool.check_ticker(i)
                 j = self.datatool.check_ticker(j)
-                edge_bunch.append((i, j, W[k].cpu().data.numpy()))
+                edge_bunch.append((i, j, W[k].item()))
                 
         g.add_weighted_edges_from(edge_bunch)
         self.top_degree_nodes(g)
@@ -373,14 +373,15 @@ class Experimental_platform:
                 edgelist[(i,j)]=prs[0]
         edgelist=sorted(edgelist.items(),key=lambda x:x[1],reverse=True)
         edge_bunch = []
-        for k in range(0, int(TICKER_NUM * (TICKER_NUM - 1) * 0.5 * rare_ratio)):
+        # FIXED: Use actual_ticker_num from datatool (not global TICKER_NUM)
+        actual_num = self.datatool.actual_ticker_num
+        for k in range(0, int(actual_num * (actual_num - 1) * 0.5 * rare_ratio)):
             ((i, j), weight) = edgelist[k]
-            # g.add_edge(i, j)
             edge_bunch.append((i, j, weight))
         g.add_weighted_edges_from(edge_bunch)
         self.top_degree_nodes(g)
         return g
-    
+
     def extract_largest_connected_component(self, g):
         """
         Extract the largest connected component from a graph
@@ -480,8 +481,8 @@ class Experimental_platform:
         for i, (node, degree) in enumerate(top_nodes[:5], 1):
             print(f"  {i}. {node}: degree={degree}")
     
-    def evolving_coinvestment_patterns(self, start_year=2010, end_year=2016, 
-                                      rare_ratio=0.001, compare_with_pcc=True):
+    def evolving_coinvestment_patterns(self, start_year=2010, end_year=2016,
+                                      rare_ratio=0.002, compare_with_pcc=True):
         """
         Discover evolving co-investment patterns over multiple years
         Reproduces Figure 5 from the paper
@@ -529,7 +530,14 @@ class Experimental_platform:
                 # ===== DEEPCNL NETWORK =====
                 print(f"\n🔬 Learning DNL network for {year}...")
                 g_dnl = self.deep_CNL('igo', train_x, train_y, rare_ratio)
-                
+
+                # Save graph for MTP2 pipeline
+                try:
+                    from mtp2.utils import save_graph as _save_graph
+                    _save_graph(g_dnl, year, 'deepcnl')
+                except ImportError:
+                    pass
+
                 # Extract largest connected component
                 print(f"\n📊 Extracting largest connected component (DNL)...")
                 lcc_dnl = self.extract_largest_connected_component(g_dnl)
@@ -550,7 +558,14 @@ class Experimental_platform:
                 if compare_with_pcc:
                     print(f"\n🔬 Learning PCC network for {year}...")
                     g_pcc = self.Pearson_cor(rare_ratio)
-                    
+
+                    # Save graph for MTP2 pipeline
+                    try:
+                        from mtp2.utils import save_graph as _save_graph
+                        _save_graph(g_pcc, year, 'pcc')
+                    except ImportError:
+                        pass
+
                     print(f"\n📊 Extracting largest connected component (PCC)...")
                     lcc_pcc = self.extract_largest_connected_component(g_pcc)
                     
@@ -734,9 +749,9 @@ class Experimental_platform:
             edgelist[(i, j)] = weight
         edgelist = sorted(edgelist.items(), key=lambda x: x[1], reverse=True)
         edge_bunch = []
-        for k in range(0, int(TICKER_NUM * (TICKER_NUM - 1) * 0.5 * rare_ratio)):
+        actual_num = self.datatool.actual_ticker_num
+        for k in range(0, int(actual_num * (actual_num - 1) * 0.5 * rare_ratio)):
             ((i, j), weight) = edgelist[k]
-            # g.add_edge(i, j)
             edge_bunch.append((i, j, weight))
         g.add_weighted_edges_from(edge_bunch)
         self.top_degree_nodes(g, TOP_DEGREE_NODE_NUM)
@@ -757,9 +772,9 @@ class Experimental_platform:
             edgelist[(i, j)] = 1.0/(distance+1)
         edgelist = sorted(edgelist.items(), key=lambda x: x[1], reverse=True)
         edge_bunch=[]
-        for k in range(0,int(TICKER_NUM*(TICKER_NUM-1)*0.5*rare_ratio)):
+        actual_num = self.datatool.actual_ticker_num
+        for k in range(0,int(actual_num*(actual_num-1)*0.5*rare_ratio)):
             ((i,j),weight)=edgelist[k]
-            #g.add_edge(i, j)
             edge_bunch.append((i,j,weight))
         g.add_weighted_edges_from(edge_bunch)
         self.top_degree_nodes(g, TOP_DEGREE_NODE_NUM)

@@ -27,8 +27,14 @@ class Data_util:
         """Read the raw csv data as a pandas dataframe"""
         df = pd.read_csv(fname, index_col=0, parse_dates=True, date_format='ISO8601')
         df = df.sort_index()
-        df = df[~df.index.duplicated(keep='first')]
         df.columns = df.columns.str.lower()
+
+        if 'symbol' in df.columns:
+            # Multi-ticker file: deduplicate by (date, symbol) pairs
+            df = df[~df.reset_index().duplicated(subset=[df.index.name or 'date', 'symbol'], keep='first').values]
+        else:
+            # Single-ticker file: deduplicate by date only
+            df = df[~df.index.duplicated(keep='first')]
 
         # Handle both 'close' and 'adj close' columns
         if 'adj close' not in df.columns:
