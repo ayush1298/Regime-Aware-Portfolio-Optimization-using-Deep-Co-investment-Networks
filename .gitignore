@@ -3,6 +3,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.env
+.cursorindexingignore
 
 # Virtual environment
 deepcnl_env/
@@ -12,6 +14,8 @@ env/
 # IDE
 .vscode/
 .idea/
+.specstory/
+.claude/
 
 # OS files
 .DS_Store
