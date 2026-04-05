@@ -1,0 +1,134 @@
+{
+  "regime_timeline": [
+    {
+      "year": 2010,
+      "regime": "recovery",
+      "color": "rgba(245, 158, 11, 0.8)",
+      "known_event": "Post-2008 recovery, flash crash",
+      "is_match": true
+    },
+    {
+      "year": 2011,
+      "regime": "crisis",
+      "color": "rgba(239, 68, 68, 0.8)",
+      "known_event": "European debt crisis, US downgrade",
+      "is_match": true
+    },
+    {
+      "year": 2012,
+      "regime": "bull",
+      "color": "rgba(16, 185, 129, 0.8)",
+      "known_event": "Markets stabilized",
+      "is_match": true
+    },
+    {
+      "year": 2013,
+      "regime": "recovery",
+      "color": "rgba(245, 158, 11, 0.8)",
+      "known_event": "Strong bull run (+30% S&P)",
+      "is_match": false
+    },
+    {
+      "year": 2014,
+      "regime": "bull",
+      "color": "rgba(16, 185, 129, 0.8)",
+      "known_event": "Continued growth",
+      "is_match": true
+    },
+    {
+      "year": 2015,
+      "regime": "crisis",
+      "color": "rgba(239, 68, 68, 0.8)",
+      "known_event": "China slowdown fears",
+      "is_match": false
+    },
+    {
+      "year": 2016,
+      "regime": "recovery",
+      "color": "rgba(245, 158, 11, 0.8)",
+      "known_event": "Brexit, Trump election volatility",
+      "is_match": true
+    }
+  ],
+  "feature_vectors": {
+    "2010": {
+      "density": 0.0200404486118771,
+      "avg_clustering": 0.1258853365618781,
+      "avg_path_length": 3.1718713856118437,
+      "assortativity": -0.3767418594569853,
+      "degree_entropy": 4.2788380916120445
+    },
+    "2011": {
+      "density": 0.0181968569065343,
+      "avg_clustering": 0.0510182644240615,
+      "avg_path_length": 3.281718368769606,
+      "assortativity": -0.5053358640499419,
+      "degree_entropy": 4.2463889317268615
+    },
+    "2012": {
+      "density": 0.0293216046914567,
+      "avg_clustering": 0.0906233769115507,
+      "avg_path_length": 2.927410468319559,
+      "assortativity": -0.3495074084010555,
+      "degree_entropy": 4.201809473337682
+    },
+    "2013": {
+      "density": 0.0121245522182419,
+      "avg_clustering": 0.0497160875467571,
+      "avg_path_length": 3.856997144022848,
+      "assortativity": -0.4133967329758938,
+      "degree_entropy": 4.569669927712651
+    },
+    "2014": {
+      "density": 0.022289766970618,
+      "avg_clustering": 0.2314759171625709,
+      "avg_path_length": 2.1512437810945273,
+      "assortativity": -0.4447860519066485,
+      "degree_entropy": 3.863190576440693
+    },
+    "2015": {
+      "density": 0.0154973231896308,
+      "avg_clustering": 0.1358452049565547,
+      "avg_path_length": 2.915200435334663,
+      "assortativity": -0.5141425587018393,
+      "degree_entropy": 4.202124378349639
+    },
+    "2016": {
+      "density": 0.0142857142857142,
+      "avg_clustering": 0.0419874473547334,
+      "avg_path_length": 3.5071638039379973,
+      "assortativity": -0.4089251164074329,
+      "degree_entropy": 4.44912530204568
+    }
+  },
+  "radar_averages": {
+    "bull": {
+      "density": 0.7955510767967037,
+      "avg_clustering": 0.6283347994897513,
+      "avg_path_length": 0.22751433592150805,
+      "hub_concentration": 0.43636363636363634,
+      "assortativity": 0.7106369954061402,
+      "degree_entropy": 0.2396523665464061
+    },
+    "crisis": {
+      "density": 0.2746132127698173,
+      "avg_clustering": 0.2714903307190403,
+      "avg_path_length": 0.555306318922621,
+      "hub_concentration": 0.46704545454545454,
+      "assortativity": 0.02674609473070544,
+      "degree_entropy": 0.511078034973687
+    },
+    "recovery": {
+      "density": 0.19532530311619742,
+      "avg_clustering": 0.16118224236737275,
+      "avg_path_length": 0.7977513199369947,
+      "hub_concentration": 0.4134487072560467,
+      "assortativity": 0.6952018177525466,
+      "degree_entropy": 0.805903050090599
+    }
+  },
+  "validation": {
+    "matches": 5,
+    "total_years": 7
+  }
+}

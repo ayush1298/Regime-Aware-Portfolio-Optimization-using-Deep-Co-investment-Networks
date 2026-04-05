@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio Performance - DeepCNL{% endblock %}
+
+{% block content %}
+<div class="row mb-5 fade-in">
+    <div class="col-12 text-center">
+        <h1 class="display-4 fw-bold" style="color: var(--primary-color);">Regime-Aware Portfolio</h1>
+        <p class="lead text-muted">Backtesting DeepCNL centrality insights against benchmarks (2011-2016)</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-5 fade-in">
+    <!-- KPI Highlight for the Adaptive strategy -->
+    <div class="col-md-3">
+        <div class="kpi-card shadow-sm border-start border-4 border-success h-100">
+            <h4 class="kpi-label">Regime-Aware Sharpe</h4>
+            <div class="kpi-value text-success">{{ "%.2f"|format(data.summary_metrics.regime_aware.sharpe) }}</div>
+            <div class="kpi-subtitle">Risk-adjusted return</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="kpi-card shadow-sm border-start border-4 border-primary h-100">
+            <h4 class="kpi-label">Regime Cum. Return</h4>
+            <div class="kpi-value text-primary">{{ "%.1f"|format(data.summary_metrics.regime_aware.cumulative_return * 100) }}%</div>
+            <div class="kpi-subtitle">Total wealth growth</div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="kpi-card shadow-sm border-start border-4 border-danger h-100">
+            <h4 class="kpi-label">Hub-Avoid Max Drawdown</h4>
+            <div class="kpi-value text-danger">{{ "%.2f"|format(data.summary_metrics.deepcnl_hub_avoid.max_drawdown * 100) }}%</div>
+            <div class="kpi-subtitle">Unprecedented safety</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="kpi-card shadow-sm border-start border-4 border-warning h-100">
+            <h4 class="kpi-label">S&P 500 Sharpe</h4>
+            <div class="kpi-value text-warning">{{ "%.2f"|format(data.summary_metrics.sp500_equal_weight.sharpe) }}</div>
+            <div class="kpi-subtitle">Baseline benchmark</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-lg-8">
+        <div class="chart-container shadow-lg rounded-3 h-100 p-4">
+            <h3 class="h5 mb-4 border-bottom pb-2">Cumulative Wealth Path</h3>
+            <div style="height: 350px;">
+                <canvas id="wealthChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="chart-container shadow-lg rounded-3 h-100 p-4">
+            <h3 class="h5 mb-4 border-bottom pb-2">Sharpe Ratio Comparison</h3>
+            <div style="height: 350px;">
+                <canvas id="sharpeChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-12">
+        <div class="chart-container shadow-lg rounded-3 p-4" style="height: auto;">
+            <h3 class="h5 mb-4 border-bottom pb-2">Performance Summary Matrix</h3>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="text-start">Strategy</th>
+                            <th>Total Return</th>
+                            <th>Sharpe Ratio</th>
+                            <th>Max Drawdown</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, metric in data.summary_metrics.items() %}
+                        <tr class="{% if key == 'regime_aware' %}bg-warning bg-opacity-10 fw-bold{% elif key == 'sp500_equal_weight' %}bg-light{% endif %}">
+                            <td class="text-start">{{ metric.name }}</td>
+                            <td class="{% if metric.cumulative_return > 1.0 %}text-success{% endif %}">
+                                +{{ "%.1f"|format(metric.cumulative_return * 100) }}%
+                            </td>
+                            <td>{{ "%.2f"|format(metric.sharpe) }}</td>
+                            <td class="{% if metric.max_drawdown > -0.01 %}text-success{% else %}text-danger{% endif %}">
+                                {{ "%.1f"|format(metric.max_drawdown * 100) }}%
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fade-in {
+        animation: fadeIn 0.6s ease-in;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const portData = {{ data | tojson }};
+    
+    // Process Data
+    const years = Object.keys(portData.annual_returns).sort();
+    
+    const strategies = [
+        {key: 'regime_aware', name: 'Regime-Aware', color: '#8e44ad', width: 4, dash: []},
+        {key: 'deepcnl_hub_avoid', name: 'DeepCNL Avoid', color: '#27ae60', width: 2, dash: []},
+        {key: 'deepcnl_hub_follow', name: 'DeepCNL Follow', color: '#2980b9', width: 2, dash: []},
+        {key: 'sp500', name: 'S&P 500', color: '#f39c12', width: 3, dash: [5, 5]},
+        {key: 'pcc_hub_avoid', name: 'PCC Avoid', color: '#c0392b', width: 2, dash: []}
+    ];
+
+    // Compute Wealth Paths (Start at 1.0)
+    const datasets = strategies.map(strat => {
+        let wealth = 1.0;
+        const datapath = [1.0]; // start of 2010
+        
+        years.forEach(y => {
+            wealth *= (1 + portData.annual_returns[y][strat.key]);
+            datapath.push(wealth);
+        });
+        
+        return {
+            label: strat.name,
+            data: datapath,
+            borderColor: strat.color,
+            borderWidth: strat.width,
+            borderDash: strat.dash,
+            pointRadius: strat.key === 'regime_aware' ? 5 : 3,
+            tension: 0.1,
+            fill: false
+        };
+    });
+
+    const wCtx = document.getElementById('wealthChart').getContext('2d');
+    new Chart(wCtx, {
+        type: 'line',
+        data: {
+            labels: ['2010'].concat(years),
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            return ctx.dataset.label + ': ' + ctx.raw.toFixed(3);
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Sharpe Bar Chart
+    const sCtx = document.getElementById('sharpeChart').getContext('2d');
+    const stratKeys = Object.keys(portData.summary_metrics);
+    
+    const colors = stratKeys.map(k => k === 'regime_aware' ? '#8e44ad' : 
+                                     k === 'sp500_equal_weight' ? '#f39c12' : '#bdc3c7');
+
+    new Chart(sCtx, {
+        type: 'bar',
+        data: {
+            labels: stratKeys.map(k => portData.summary_metrics[k].name.split(' ')[0]),
+            datasets: [{
+                label: 'Sharpe Ratio',
+                data: stratKeys.map(k => portData.summary_metrics[k].sharpe),
+                backgroundColor: colors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+{% endblock %}

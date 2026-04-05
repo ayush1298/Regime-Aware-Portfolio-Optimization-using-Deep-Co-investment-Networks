@@ -18,10 +18,22 @@ def load_data():
     
     with open(os.path.join(data_dir, 'performance_metrics.json'), 'r') as f:
         performance_data = json.load(f)
+        
+    try:
+        with open(os.path.join(data_dir, 'regime_data.json'), 'r') as f:
+            regime_data = json.load(f)
+    except FileNotFoundError:
+        regime_data = {}
+        
+    try:
+        with open(os.path.join(data_dir, 'portfolio_data.json'), 'r') as f:
+            portfolio_data = json.load(f)
+    except FileNotFoundError:
+        portfolio_data = {}
     
-    return network_data, rankings_data, performance_data
+    return network_data, rankings_data, performance_data, regime_data, portfolio_data
 
-NETWORK_DATA, RANKINGS_DATA, PERFORMANCE_DATA = load_data()
+NETWORK_DATA, RANKINGS_DATA, PERFORMANCE_DATA, REGIME_DATA, PORTFOLIO_DATA = load_data()
 
 @app.route('/')
 def index():
@@ -50,6 +62,16 @@ def performance():
     """Performance and financial analysis page"""
     return render_template('performance.html')
 
+@app.route('/regime')
+def regime():
+    """Market Regime Detection page"""
+    return render_template('regime.html', data=REGIME_DATA)
+
+@app.route('/portfolio')
+def portfolio():
+    """Portfolio Backtesting Performance page"""
+    return render_template('portfolio.html', data=PORTFOLIO_DATA)
+
 # API Endpoints
 @app.route('/api/network/<int:year>')
 def get_network_data(year):
@@ -69,6 +91,14 @@ def get_rankings_data(year):
 def get_performance_data():
     """Get performance comparison data"""
     return jsonify(PERFORMANCE_DATA)
+
+@app.route('/api/regime')
+def get_regime_api():
+    return jsonify(REGIME_DATA)
+
+@app.route('/api/portfolio')
+def get_portfolio_api():
+    return jsonify(PORTFOLIO_DATA)
 
 @app.route('/api/search_stock')
 def search_stock():

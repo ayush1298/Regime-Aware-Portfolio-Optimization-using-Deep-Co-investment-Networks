@@ -1,0 +1,78 @@
+{
+  "annual_returns": {
+    "2011": {
+      "deepcnl_hub_avoid": -0.0052897508690085,
+      "deepcnl_hub_follow": -0.0155352423998668,
+      "pcc_hub_avoid": -0.0175167371220156,
+      "sp500": 0.0102605273290862,
+      "regime_aware": -0.0052897508690085
+    },
+    "2012": {
+      "deepcnl_hub_avoid": 0.1528951053889878,
+      "deepcnl_hub_follow": 0.2391065951650115,
+      "pcc_hub_avoid": 0.1472463854753137,
+      "sp500": 0.1651457640291186,
+      "regime_aware": 0.1528951053889878
+    },
+    "2013": {
+      "deepcnl_hub_avoid": 0.3609732816865879,
+      "deepcnl_hub_follow": 0.6236104806110822,
+      "pcc_hub_avoid": 0.3788984225833074,
+      "sp500": 0.336166312065118,
+      "regime_aware": 0.6236104806110822
+    },
+    "2014": {
+      "deepcnl_hub_avoid": 0.1815046831489875,
+      "deepcnl_hub_follow": 0.1692386066553511,
+      "pcc_hub_avoid": 0.0872022923117198,
+      "sp500": 0.1615040989460116,
+      "regime_aware": 0.1815046831489875
+    },
+    "2015": {
+      "deepcnl_hub_avoid": 0.0375153007168239,
+      "deepcnl_hub_follow": -0.0342890238347837,
+      "pcc_hub_avoid": -0.0428019852946901,
+      "sp500": -0.0192130927708146,
+      "regime_aware": -0.0342890238347837
+    },
+    "2016": {
+      "deepcnl_hub_avoid": 0.0701028424580899,
+      "deepcnl_hub_follow": 0.242668255739781,
+      "pcc_hub_avoid": 0.0495603996412056,
+      "sp500": 0.1379617131830309,
+      "regime_aware": 0.0701028424580899
+    }
+  },
+  "summary_metrics": {
+    "deepcnl_hub_avoid": {
+      "name": "DeepCNL Hub-Avoid",
+      "sharpe": 0.9384443888258588,
+      "max_drawdown": -0.005289750869008514,
+      "cumulative_return": 1.047347029506657
+    },
+    "deepcnl_hub_follow": {
+      "name": "DeepCNL Hub-Follow",
+      "sharpe": 0.8448817441320977,
+      "max_drawdown": -0.03428902383478371,
+      "cumulative_return": 1.7790490165143806
+    },
+    "pcc_hub_avoid": {
+      "name": "PCC Hub-Avoid",
+      "sharpe": 0.5761640044570493,
+      "max_drawdown": -0.042801985294690134,
+      "cumulative_return": 0.6975935574065357
+    },
+    "sp500_equal_weight": {
+      "name": "S&P 500 Equal-Weight",
+      "sharpe": 0.9614721425052503,
+      "max_drawdown": -0.019213092770814625,
+      "cumulative_return": 1.0389060762000333
+    },
+    "regime_aware": {
+      "name": "Regime-Aware (Adaptive)",
+      "sharpe": 0.6601867623073372,
+      "max_drawdown": -0.034289023834783744,
+      "cumulative_return": 1.2734026760437596
+    }
+  }
+}

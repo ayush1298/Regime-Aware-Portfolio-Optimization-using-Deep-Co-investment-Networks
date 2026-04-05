@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Market Regime Detection - DeepCNL{% endblock %}
+
+{% block content %}
+<div class="row mb-5 fade-in">
+    <div class="col-12 text-center">
+        <h1 class="display-4 fw-bold" style="color: var(--primary-color);">Market Regime Detection</h1>
+        <p class="lead text-muted">Unsupervised topological clustering of DeepCNL market states.</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="kpi-card glass-effect">
+            <h4 class="kpi-label">Regimes Detected</h4>
+            <div class="kpi-value" style="color: var(--warning-color);">3</div>
+            <div class="kpi-subtitle">Bull • Crisis • Recovery</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="kpi-card glass-effect">
+            <h4 class="kpi-label">Historical Matches</h4>
+            <div class="kpi-value" style="color: var(--success-color);">{{ data.validation.matches }} / {{ data.validation.total_years }}</div>
+            <div class="kpi-subtitle">Alignment with actual macroeconomic events</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="kpi-card glass-effect">
+            <h4 class="kpi-label">Primary Factor</h4>
+            <div class="kpi-value" style="color: var(--secondary-color);">Assortativity</div>
+            <div class="kpi-subtitle">Key differentiator in structural regimes</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-12">
+        <div class="chart-container shadow-lg rounded-3 p-4" style="height: auto;">
+            <h3 class="h5 mb-4 text-center">Regime Timeline</h3>
+            <div style="position: relative; height: 200px; width: 100%;">
+                <canvas id="timelineChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="chart-container shadow-lg rounded-3 h-100 p-4">
+            <h3 class="h5 mb-4 text-center">Topological Signature (Radar)</h3>
+            <div style="position: relative; height: 350px; width: 100%;">
+                <canvas id="radarChart"></canvas>
+            </div>
+            <p class="text-muted text-center mt-3 small">Normalized average feature vectors per regime cluster.</p>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="chart-container shadow-lg rounded-3 h-100 p-4 overflow-auto">
+            <h3 class="h5 mb-4 text-center">Historical Validation Tracking</h3>
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Year</th>
+                        <th>Detected Regime</th>
+                        <th>Known Event</th>
+                        <th>Match</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data.regime_timeline %}
+                    <tr class="{% if item.is_match %}table-success{% else %}table-warning{% endif %}">
+                        <td class="fw-bold">{{ item.year }}</td>
+                        <td>
+                            <span class="badge" style="background-color: {{ item.color }}; font-size: 0.9rem;">
+                                {{ item.regime | title }}
+                            </span>
+                        </td>
+                        <td class="small">{{ item.known_event }}</td>
+                        <td class="text-center">
+                            {% if item.is_match %}
+                            <i class="fas fa-check-circle text-success fs-5"></i>
+                            {% else %}
+                            <i class="fas fa-times-circle text-danger fs-5"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    .fade-in {
+        animation: fadeIn 0.8s ease-in;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const regimeData = {{ data | tojson }};
+    
+    // 1. Timeline Chart (Gantt style using bar chart)
+    const tlCtx = document.getElementById('timelineChart').getContext('2d');
+    const labels = regimeData.regime_timeline.map(d => d.year);
+    const colors = regimeData.regime_timeline.map(d => d.color);
+    
+    new Chart(tlCtx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Market Regime',
+                data: Array(labels.length).fill(1),
+                backgroundColor: colors,
+                borderWidth: 0,
+                borderRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            return regimeData.regime_timeline[ctx.dataIndex].regime.toUpperCase();
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { display: false },
+                y: { 
+                    grid: { display: false },
+                    ticks: { font: { size: 14, weight: 'bold' } }
+                }
+            }
+        }
+    });
+
+    // 2. Radar Chart
+    const rdCtx = document.getElementById('radarChart').getContext('2d');
+    const radarStats = regimeData.radar_averages;
+    const features = ['Density', 'Avg Clustering', 'Avg Path Length', 'Assortativity', 'Entropy'];
+    const keys = ['density', 'avg_clustering', 'avg_path_length', 'assortativity', 'degree_entropy'];
+    
+    const radarDatasets = [];
+    const colorMap = {
+        'bull': 'rgba(16, 185, 129, 0.5)',
+        'crisis': 'rgba(239, 68, 68, 0.5)',
+        'recovery': 'rgba(245, 158, 11, 0.5)'
+    };
+    const borderMap = {
+        'bull': 'rgba(16, 185, 129, 1)',
+        'crisis': 'rgba(239, 68, 68, 1)',
+        'recovery': 'rgba(245, 158, 11, 1)'
+    };
+
+    for (const [regime, vals] of Object.entries(radarStats)) {
+        radarDatasets.push({
+            label: regime.toUpperCase(),
+            data: keys.map(k => vals[k]),
+            backgroundColor: colorMap[regime],
+            borderColor: borderMap[regime],
+            pointBackgroundColor: borderMap[regime],
+            borderWidth: 2
+        });
+    }
+
+    new Chart(rdCtx, {
+        type: 'radar',
+        data: {
+            labels: features,
+            datasets: radarDatasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    min: 0,
+                    max: 1,
+                    ticks: { display: false }
+                }
+            },
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+</script>
+{% endblock %}
