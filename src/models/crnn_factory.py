@@ -1,6 +1,6 @@
-from Models.crnn_rnn import CRNN_RNN
-from Models.crnn_lstm import CRNN_LSTM
-from Models.crnn_gru import CRNN_GRU
+from src.models.crnn_rnn import CRNN_RNN
+from src.models.crnn_lstm import CRNN_LSTM
+from src.models.crnn_gru import CRNN_GRU
 
 class CRNN_factory:
     def __init__(self, feature_num, filter_num, window, ticker_num, hidden_unit_num, hidden_layer_num, dropout):

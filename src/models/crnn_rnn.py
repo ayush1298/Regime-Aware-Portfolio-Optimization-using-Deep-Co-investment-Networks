@@ -1,18 +1,18 @@
-from Models.crnn import CRNN
+from src.models.crnn import CRNN
 from torch import nn
 import torch
 from torch.autograd import Variable
 
-class CRNN_GRU(CRNN):
+class CRNN_RNN(CRNN):
     """
-    A mixed deep learning framework with Convolution and GRU
+    A mixed deep learning framework with Convolution and RNN
     """
 
     def get_code(self):
-        return 'CRNN_GRU'
+        return 'CRNN_RNN'
 
     def __init__(self, feature_num, filters_num, window, ticker_num, hidden_unit_num, hidden_layer_num, dropout_ratio):
-        super(CRNN_GRU, self).__init__()  # Fixed: was super(CRNN, self).__init__()
+        super(CRNN_RNN, self).__init__()  # Fixed: was super(CRNN, self).__init__()
         self.hidden_layer_num = hidden_layer_num
         self.filters_num = filters_num
         self.hidden_unit_num = hidden_unit_num
@@ -30,8 +30,8 @@ class CRNN_GRU(CRNN):
         )
         self.bn = nn.BatchNorm1d(filters_num)
         self.pool = nn.MaxPool1d(int(ticker_num*(ticker_num-1)/2))
-        self.rnn = nn.GRU(
-            input_size=int(ticker_num*(ticker_num-1)/2),
+        self.rnn = nn.RNN(
+            input_size=int(ticker_num * (ticker_num - 1) / 2),
             hidden_size=hidden_unit_num,
             num_layers=hidden_layer_num,
             dropout=dropout_ratio,
@@ -46,4 +46,4 @@ class CRNN_GRU(CRNN):
         # The axes semantics are (num_layers, minibatch_size, hidden_dim)
         h0 = Variable(torch.zeros(self.hidden_layer_num, self.filters_num, self.hidden_unit_num)).to(self.device).float()
         h0 = torch.nn.init.xavier_uniform_(h0)  # Fixed: added underscore
-        return h0  # GRU
+        return h0  # RNN

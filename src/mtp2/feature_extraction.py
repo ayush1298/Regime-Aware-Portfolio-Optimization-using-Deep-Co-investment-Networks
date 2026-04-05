@@ -8,7 +8,7 @@ import sys
 # Ensure project root is in python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from mtp2.utils import load_graph, get_lcc
+from src.src.utils.core_utils import load_graph, get_lcc
 
 YEARS = list(range(2010, 2017))  # 2010 to 2016 inclusive
 

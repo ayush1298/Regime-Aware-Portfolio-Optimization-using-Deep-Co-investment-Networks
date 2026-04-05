@@ -7,8 +7,8 @@ import sys
 import os
 sys.path.append(os.path.dirname(__file__))
 
-from stock_network_analysis import *
-from data_util import Data_util
+from src.mtp1.stock_network_analysis import *
+from src.mtp1.data_util import Data_util
 
 def main():
     print("=" * 70)

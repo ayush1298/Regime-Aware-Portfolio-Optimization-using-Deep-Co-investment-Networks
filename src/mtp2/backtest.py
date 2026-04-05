@@ -9,7 +9,7 @@ import seaborn as sns
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
 
-from mtp2.utils import load_price_data, annual_return
+from src.src.utils.core_utils import load_price_data, annual_return
 
 sns.set_theme(style='whitegrid')
 

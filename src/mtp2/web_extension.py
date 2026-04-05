@@ -50,7 +50,7 @@ def generate_web_data():
             "regime_aware": row['regime_aware']
         }
         
-    from mtp2.phase4_backtest import sharpe_ratio, max_drawdown, cumulative_return
+    from src.src.mtp2.backtest import sharpe_ratio, max_drawdown, cumulative_return
     strategies = [
         ('deepcnl_hub_avoid', 'DeepCNL Hub-Avoid'),
         ('deepcnl_hub_follow', 'DeepCNL Hub-Follow'),

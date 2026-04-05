@@ -10,7 +10,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
 
 # Import same standard metrics as Phase 4
-from mtp2.phase4_backtest import sharpe_ratio, max_drawdown, cumulative_return
+from src.src.mtp2.backtest import sharpe_ratio, max_drawdown, cumulative_return
 
 sns.set_theme(style='whitegrid')
 

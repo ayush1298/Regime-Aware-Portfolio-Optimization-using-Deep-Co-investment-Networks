@@ -13,7 +13,7 @@ scikit-learn>=1.0.0
 pandas-datareader>=0.10.0
 
 # Graph Processing and Network Analysis
-networkx>=2.6.0
+networkx>=3.0
 
 # Time Series Analysis
 fastdtw>=0.3.4

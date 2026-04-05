@@ -8,7 +8,7 @@ from scipy.stats import zscore
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
 
-from mtp2.utils import load_graph, YEARS
+from src.src.utils.core_utils import load_graph, YEARS
 
 def compute_centrality(method):
     all_rows = []

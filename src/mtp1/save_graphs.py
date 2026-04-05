@@ -16,7 +16,7 @@ import time
 # Add project root to path so stock_network_analysis imports work
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from mtp2.utils import save_graph, GRAPHS_DIR, YEARS
+from src.src.utils.core_utils import save_graph, GRAPHS_DIR, YEARS
 
 
 def run_and_save_all_years(ticker_num=470, rare_ratio=0.002, start_year=2010, end_year=2016):
@@ -26,7 +26,7 @@ def run_and_save_all_years(ticker_num=470, rare_ratio=0.002, start_year=2010, en
     This imports stock_network_analysis at call time (not module level)
     to avoid triggering model init on import.
     """
-    from stock_network_analysis import (
+    from src.mtp1.stock_network_analysis import (
         Experimental_platform, Data_util,
         WINDOW, FEATURE_NUM, DATA_PATH, SPY_PATH
     )
