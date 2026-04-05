@@ -20,16 +20,11 @@ env/
 # OS files
 .DS_Store
 Thumbs.db
+plan.md
 
 # Model checkpoints and outputs
 model.pt
 *.pkl
-outputs/graphs/
-outputs/features/
-outputs/regimes/
-outputs/centrality/
-outputs/portfolios/
-outputs/figures/
 
 # SLURM logs
 logs/

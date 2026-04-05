@@ -1,0 +1,715 @@
+========================================
+DeepCNL Graph Generation — All Years
+Job ID: 22148
+Node: gnode2
+Python: /home/others/CS60078_P6/miniconda3/envs/deepcnl_env/bin/python
+Started: Saturday 04 April 2026 05:35:06 PM IST
+========================================
+Warning: visibility_graph not available. VWL method will not work.
+Warning: fastdtw not available. DTW method will not work.
+Using device: cuda
+======================================================================
+PHASE 0 — SAVING DEEPCNL & PCC GRAPHS
+======================================================================
+Ticker count: 470
+Rare ratio:   0.002
+Years:        2010–2016
+Output dir:   /home/others/CS60078_P6/ayush/Deep-Co-investment-Network-Learning-for-Financial-Assets/outputs/graphs
+======================================================================
+
+
+======================================================================
+Year 2010 (seed=0)
+======================================================================
+📥 Loading input data...
+📅 Period: 2010-01-01 to 2010-12-31
+📊 Total rows in period: 118138
+📊 Available tickers in date range: 470
+📅 Total trading days: 252
+📅 Required timesteps (after window alignment): 224
+✅ Tickers with ≥80% data coverage: 468
+🎯 Using 468 tickers (requested 470)
+📦 Data shape validation:
+   Expected: 468 × 224 × 4 = 419328
+   Actual: 419328
+🔗 Generating 109278 pairwise combinations from 468 tickers
+📥 Loading target data...
+📊 Total rows for target: 252
+📊 Daily sum data type: float64
+📊 Daily sum shape: 252
+📊 Total daily returns: 252
+📊 Final target labels: 192 (after window alignment)
+
+Training DeepCNL for 2010...
+[DeepCNL]
+🔧 Initializing model with 468 tickers (originally requested 12)
+🚀 Starting model training...
+📊 Training data shape: torch.Size([109278, 8, 224])
+📊 Target labels: 192
+  Epoch   0: loss = 0.917985
+  Epoch  10: loss = 0.895739
+  Epoch  20: loss = 0.874525
+  Epoch  30: loss = 0.860422
+  Epoch  40: loss = 0.849578
+  Epoch  50: loss = 0.837631
+  Epoch  60: loss = 0.825781
+  Epoch  70: loss = 0.810988
+  Epoch  80: loss = 0.800626
+  Epoch  90: loss = 0.791242
+  Epoch 100: loss = 0.780083
+  Epoch 110: loss = 0.772765
+  Epoch 120: loss = 0.763581
+  Epoch 130: loss = 0.755933
+  Epoch 140: loss = 0.749934
+  Epoch 150: loss = 0.744383
+  Epoch 160: loss = 0.738368
+  Epoch 170: loss = 0.732807
+  Epoch 180: loss = 0.728265
+  Epoch 190: loss = 0.723301
+✅ Model training completed and saved
+
+[Top 20 nodes by degree]
+1. BAC: degree=42
+2. HPQ: degree=39
+3. F: degree=30
+4. CSCO: degree=16
+5. GE: degree=15
+6. INTC: degree=13
+7. BSX: degree=11
+8. PFE: degree=10
+9. MNST: degree=8
+10. AAPL: degree=7
+11. ATVI: degree=6
+12. LVLT: degree=6
+13. FTR: degree=5
+14. COG: degree=5
+15. V: degree=5
+16. KEY: degree=5
+17. AAL: degree=4
+18. ARNC: degree=4
+19. IPG: degree=4
+20. WY: degree=4
+Saved deepcnl graph for 2010: 148 nodes, 218 edges
+Computing PCC for 2010...
+[Pearson correlation coefficients on time series tuples with (coefficient, p-value)]
+
+[Top 20 nodes by degree]
+1. UAA: degree=14
+2. AZO: degree=13
+3. VRSN: degree=13
+4. UNP: degree=12
+5. DLTR: degree=12
+6. YUM: degree=12
+7. DD: degree=12
+8. CMG: degree=12
+9. PPG: degree=11
+10. ROP: degree=10
+11. CMI: degree=10
+12. FFIV: degree=10
+13. INTU: degree=10
+14. MO: degree=9
+15. AAP: degree=8
+16. UDR: degree=7
+17. XEL: degree=7
+18. DE: degree=7
+19. PCAR: degree=7
+20. CXO: degree=7
+Saved pcc graph for 2010: 106 nodes, 218 edges
+
+======================================================================
+Year 2011 (seed=1)
+======================================================================
+📥 Loading input data...
+📅 Period: 2011-01-01 to 2011-12-31
+📊 Total rows in period: 118440
+📊 Available tickers in date range: 470
+📅 Total trading days: 252
+📅 Required timesteps (after window alignment): 224
+✅ Tickers with ≥80% data coverage: 470
+🎯 Using 470 tickers (requested 470)
+📦 Data shape validation:
+   Expected: 470 × 224 × 4 = 421120
+   Actual: 421120
+🔗 Generating 110215 pairwise combinations from 470 tickers
+📥 Loading target data...
+📊 Total rows for target: 252
+📊 Daily sum data type: float64
+📊 Daily sum shape: 252
+📊 Total daily returns: 252
+📊 Final target labels: 192 (after window alignment)
+
+Training DeepCNL for 2011...
+[DeepCNL]
+🔧 Initializing model with 470 tickers (originally requested 12)
+🚀 Starting model training...
+📊 Training data shape: torch.Size([110215, 8, 224])
+📊 Target labels: 192
+  Epoch   0: loss = 0.918753
+  Epoch  10: loss = 0.898991
+  Epoch  20: loss = 0.870818
+  Epoch  30: loss = 0.842443
+  Epoch  40: loss = 0.823122
+  Epoch  50: loss = 0.806946
+  Epoch  60: loss = 0.795571
+  Epoch  70: loss = 0.784048
+  Epoch  80: loss = 0.772887
+  Epoch  90: loss = 0.762762
+  Epoch 100: loss = 0.755374
+  Epoch 110: loss = 0.745551
+  Epoch 120: loss = 0.735319
+  Epoch 130: loss = 0.726959
+  Epoch 140: loss = 0.721909
+  Epoch 150: loss = 0.713959
+  Epoch 160: loss = 0.708865
+  Epoch 170: loss = 0.702041
+  Epoch 180: loss = 0.697275
+  Epoch 190: loss = 0.692357
+✅ Model training completed and saved
+
+[Top 20 nodes by degree]
+1. BAC: degree=55
+2. CSCO: degree=37
+3. LVLT: degree=28
+4. F: degree=23
+5. MU: degree=14
+6. NFLX: degree=12
+7. HPQ: degree=12
+8. HBAN: degree=8
+9. PHM: degree=6
+10. NI: degree=6
+11. LKQ: degree=5
+12. MSFT: degree=5
+13. RF: degree=5
+14. CNC: degree=5
+15. IPG: degree=4
+16. HBI: degree=4
+17. LNT: degree=4
+18. YHOO: degree=4
+19. TSN: degree=4
+20. BSX: degree=4
+Saved deepcnl graph for 2011: 156 nodes, 220 edges
+Computing PCC for 2011...
+[Pearson correlation coefficients on time series tuples with (coefficient, p-value)]
+
+[Top 20 nodes by degree]
+1. MET: degree=23
+2. SCHW: degree=21
+3. STI: degree=19
+4. C: degree=18
+5. HIG: degree=17
+6. BK: degree=17
+7. CMA: degree=16
+8. RF: degree=15
+9. AMP: degree=15
+10. SEE: degree=14
+11. IVZ: degree=14
+12. PFG: degree=13
+13. NTRS: degree=12
+14. DNB: degree=11
+15. BAC: degree=9
+16. LNC: degree=9
+17. TGNA: degree=9
+18. HBAN: degree=9
+19. NUE: degree=8
+20. JPM: degree=8
+Saved pcc graph for 2011: 89 nodes, 220 edges
+
+======================================================================
+Year 2012 (seed=2)
+======================================================================
+📥 Loading input data...
+📅 Period: 2012-01-01 to 2012-12-31
+📊 Total rows in period: 117500
+📊 Available tickers in date range: 470
+📅 Total trading days: 250
+📅 Required timesteps (after window alignment): 224
+✅ Tickers with ≥80% data coverage: 470
+🎯 Using 470 tickers (requested 470)
+📦 Data shape validation:
+   Expected: 470 × 224 × 4 = 421120
+   Actual: 421120
+🔗 Generating 110215 pairwise combinations from 470 tickers
+📥 Loading target data...
+📊 Total rows for target: 250
+📊 Daily sum data type: float64
+📊 Daily sum shape: 250
+📊 Total daily returns: 250
+📊 Final target labels: 192 (after window alignment)
+
+Training DeepCNL for 2012...
+[DeepCNL]
+🔧 Initializing model with 470 tickers (originally requested 12)
+🚀 Starting model training...
+📊 Training data shape: torch.Size([110215, 8, 224])
+📊 Target labels: 192
+  Epoch   0: loss = 0.918665
+  Epoch  10: loss = 0.905544
+  Epoch  20: loss = 0.877662
+  Epoch  30: loss = 0.844920
+  Epoch  40: loss = 0.828144
+  Epoch  50: loss = 0.815643
+  Epoch  60: loss = 0.804039
+  Epoch  70: loss = 0.791972
+  Epoch  80: loss = 0.782112
+  Epoch  90: loss = 0.772002
+  Epoch 100: loss = 0.763348
+  Epoch 110: loss = 0.755376
+  Epoch 120: loss = 0.746845
+  Epoch 130: loss = 0.738983
+  Epoch 140: loss = 0.732037
+  Epoch 150: loss = 0.727553
+  Epoch 160: loss = 0.720835
+  Epoch 170: loss = 0.714902
+  Epoch 180: loss = 0.708938
+  Epoch 190: loss = 0.703303
+✅ Model training completed and saved
+
+[Top 20 nodes by degree]
+1. BAC: degree=49
+2. HBI: degree=22
+3. BSX: degree=18
+4. HPQ: degree=15
+5. HRL: degree=14
+6. FTR: degree=10
+7. NI: degree=10
+8. PBCT: degree=10
+9. ETFC: degree=9
+10. NFLX: degree=9
+11. AAL: degree=9
+12. HRB: degree=9
+13. GT: degree=9
+14. IPG: degree=8
+15. LUV: degree=8
+16. ARNC: degree=8
+17. EA: degree=8
+18. AES: degree=7
+19. HBAN: degree=7
+20. COG: degree=7
+Saved deepcnl graph for 2012: 123 nodes, 220 edges
+Computing PCC for 2012...
+[Pearson correlation coefficients on time series tuples with (coefficient, p-value)]
+
+[Top 20 nodes by degree]
+1. CCI: degree=17
+2. CMCSA: degree=15
+3. DFS: degree=15
+4. SHW: degree=14
+5. EBAY: degree=13
+6. ALL: degree=13
+7. GPS: degree=13
+8. LEN: degree=12
+9. PPG: degree=12
+10. PHM: degree=12
+11. HD: degree=12
+12. EQIX: degree=12
+13. ADS: degree=11
+14. DIS: degree=11
+15. EXR: degree=10
+16. AGN: degree=10
+17. CL: degree=10
+18. SNI: degree=9
+19. NEE: degree=9
+20. MKC: degree=9
+Saved pcc graph for 2012: 104 nodes, 220 edges
+
+======================================================================
+Year 2013 (seed=3)
+======================================================================
+📥 Loading input data...
+📅 Period: 2013-01-01 to 2013-12-31
+📊 Total rows in period: 122624
+📊 Available tickers in date range: 490
+📅 Total trading days: 252
+📅 Required timesteps (after window alignment): 224
+✅ Tickers with ≥80% data coverage: 484
+🎯 Using 470 tickers (requested 470)
+📦 Data shape validation:
+   Expected: 470 × 224 × 4 = 421120
+   Actual: 421120
+🔗 Generating 110215 pairwise combinations from 470 tickers
+📥 Loading target data...
+📊 Total rows for target: 252
+📊 Daily sum data type: float64
+📊 Daily sum shape: 252
+📊 Total daily returns: 252
+📊 Final target labels: 192 (after window alignment)
+
+Training DeepCNL for 2013...
+[DeepCNL]
+🔧 Initializing model with 470 tickers (originally requested 12)
+🚀 Starting model training...
+📊 Training data shape: torch.Size([110215, 8, 224])
+📊 Target labels: 192
+  Epoch   0: loss = 0.917942
+  Epoch  10: loss = 0.902431
+  Epoch  20: loss = 0.869614
+  Epoch  30: loss = 0.840528
+  Epoch  40: loss = 0.803279
+  Epoch  50: loss = 0.771175
+  Epoch  60: loss = 0.753158
+  Epoch  70: loss = 0.737940
+  Epoch  80: loss = 0.728831
+  Epoch  90: loss = 0.719676
+  Epoch 100: loss = 0.711447
+  Epoch 110: loss = 0.706273
+  Epoch 120: loss = 0.699165
+  Epoch 130: loss = 0.694826
+  Epoch 140: loss = 0.688492
+  Epoch 150: loss = 0.683915
+  Epoch 160: loss = 0.683506
+  Epoch 170: loss = 0.678723
+  Epoch 180: loss = 0.673870
+  Epoch 190: loss = 0.670549
+✅ Model training completed and saved
+
+[Top 20 nodes by degree]
+1. BAC: degree=36
+2. AAPL: degree=33
+3. FB: degree=22
+4. PFE: degree=20
+5. HPQ: degree=16
+6. MSFT: degree=14
+7. INTC: degree=11
+8. PCLN: degree=10
+9. CSCO: degree=7
+10. GOOGL: degree=7
+11. DAL: degree=7
+12. NFLX: degree=5
+13. GE: degree=5
+14. ISRG: degree=5
+15. AMZN: degree=4
+16. MU: degree=4
+17. BLK: degree=4
+18. F: degree=3
+19. CMG: degree=3
+20. ADP: degree=3
+Saved deepcnl graph for 2013: 191 nodes, 220 edges
+Computing PCC for 2013...
+[Pearson correlation coefficients on time series tuples with (coefficient, p-value)]
+
+[Top 20 nodes by degree]
+1. AMP: degree=21
+2. PFG: degree=19
+3. AMG: degree=16
+4. ECL: degree=16
+5. TMK: degree=15
+6. NOC: degree=14
+7. PAYX: degree=14
+8. MMC: degree=13
+9. SBUX: degree=13
+10. SNA: degree=13
+11. CBS: degree=12
+12. PCLN: degree=11
+13. ADS: degree=10
+14. PNR: degree=10
+15. MMM: degree=9
+16. TMO: degree=9
+17. LLL: degree=8
+18. HSIC: degree=8
+19. AIZ: degree=7
+20. TJX: degree=7
+Saved pcc graph for 2013: 99 nodes, 220 edges
+
+======================================================================
+Year 2014 (seed=4)
+======================================================================
+📥 Loading input data...
+📅 Period: 2014-01-01 to 2014-12-31
+📊 Total rows in period: 123480
+📊 Available tickers in date range: 490
+📅 Total trading days: 252
+📅 Required timesteps (after window alignment): 224
+✅ Tickers with ≥80% data coverage: 490
+🎯 Using 470 tickers (requested 470)
+📦 Data shape validation:
+   Expected: 470 × 224 × 4 = 421120
+   Actual: 421120
+🔗 Generating 110215 pairwise combinations from 470 tickers
+📥 Loading target data...
+📊 Total rows for target: 252
+📊 Daily sum data type: float64
+📊 Daily sum shape: 252
+📊 Total daily returns: 252
+📊 Final target labels: 192 (after window alignment)
+
+Training DeepCNL for 2014...
+[DeepCNL]
+🔧 Initializing model with 470 tickers (originally requested 12)
+🚀 Starting model training...
+📊 Training data shape: torch.Size([110215, 8, 224])
+📊 Target labels: 192
+  Epoch   0: loss = 0.919370
+  Epoch  10: loss = 0.908933
+  Epoch  20: loss = 0.895424
+  Epoch  30: loss = 0.883996
+  Epoch  40: loss = 0.872567
+  Epoch  50: loss = 0.860781
+  Epoch  60: loss = 0.851549
+  Epoch  70: loss = 0.842264
+  Epoch  80: loss = 0.832789
+  Epoch  90: loss = 0.822311
+  Epoch 100: loss = 0.814099
+  Epoch 110: loss = 0.806991
+  Epoch 120: loss = 0.798453
+  Epoch 130: loss = 0.792899
+  Epoch 140: loss = 0.783830
+  Epoch 150: loss = 0.777698
+  Epoch 160: loss = 0.770207
+  Epoch 170: loss = 0.762479
+  Epoch 180: loss = 0.758306
+  Epoch 190: loss = 0.752345
+✅ Model training completed and saved
+
+[Top 20 nodes by degree]
+1. BAC: degree=121
+2. F: degree=15
+3. HPQ: degree=13
+4. INTC: degree=11
+5. FTR: degree=11
+6. EBAY: degree=10
+7. CSCO: degree=10
+8. VZ: degree=10
+9. HBAN: degree=9
+10. RF: degree=8
+11. ARNC: degree=7
+12. BSX: degree=6
+13. SPLS: degree=6
+14. NI: degree=6
+15. KEY: degree=6
+16. GE: degree=5
+17. MU: degree=5
+18. FB: degree=5
+19. AAPL: degree=4
+20. JNPR: degree=4
+Saved deepcnl graph for 2014: 141 nodes, 220 edges
+Computing PCC for 2014...
+[Pearson correlation coefficients on time series tuples with (coefficient, p-value)]
+
+[Top 20 nodes by degree]
+1. MAR: degree=23
+2. DPS: degree=19
+3. SWKS: degree=15
+4. LUV: degree=15
+5. AAPL: degree=13
+6. MCO: degree=13
+7. LRCX: degree=12
+8. ANTM: degree=12
+9. AWK: degree=12
+10. UNP: degree=11
+11. FRT: degree=11
+12. SPG: degree=11
+13. HBI: degree=10
+14. ESS: degree=9
+15. ALL: degree=9
+16. MSFT: degree=9
+17. EXR: degree=9
+18. NSC: degree=9
+19. EQR: degree=8
+20. AVB: degree=8
+Saved pcc graph for 2014: 104 nodes, 220 edges
+
+======================================================================
+Year 2015 (seed=5)
+======================================================================
+📥 Loading input data...
+📅 Period: 2015-01-01 to 2015-12-31
+📊 Total rows in period: 124957
+📊 Available tickers in date range: 499
+📅 Total trading days: 252
+📅 Required timesteps (after window alignment): 224
+✅ Tickers with ≥80% data coverage: 494
+🎯 Using 470 tickers (requested 470)
+📦 Data shape validation:
+   Expected: 470 × 224 × 4 = 421120
+   Actual: 421120
+🔗 Generating 110215 pairwise combinations from 470 tickers
+📥 Loading target data...
+📊 Total rows for target: 252
+📊 Daily sum data type: float64
+📊 Daily sum shape: 252
+📊 Total daily returns: 252
+📊 Final target labels: 192 (after window alignment)
+
+Training DeepCNL for 2015...
+[DeepCNL]
+🔧 Initializing model with 470 tickers (originally requested 12)
+🚀 Starting model training...
+📊 Training data shape: torch.Size([110215, 8, 224])
+📊 Target labels: 192
+  Epoch   0: loss = 0.918963
+  Epoch  10: loss = 0.911013
+  Epoch  20: loss = 0.894935
+  Epoch  30: loss = 0.882085
+  Epoch  40: loss = 0.873145
+  Epoch  50: loss = 0.862632
+  Epoch  60: loss = 0.854280
+  Epoch  70: loss = 0.842584
+  Epoch  80: loss = 0.839278
+  Epoch  90: loss = 0.835124
+  Epoch 100: loss = 0.825788
+  Epoch 110: loss = 0.820332
+  Epoch 120: loss = 0.803967
+  Epoch 130: loss = 0.787459
+  Epoch 140: loss = 0.773156
+  Epoch 150: loss = 0.764882
+  Epoch 160: loss = 0.752025
+  Epoch 170: loss = 0.738969
+  Epoch 180: loss = 0.730488
+  Epoch 190: loss = 0.722284
+✅ Model training completed and saved
+
+[Top 20 nodes by degree]
+1. BAC: degree=60
+2. FTR: degree=51
+3. GE: degree=31
+4. MU: degree=24
+5. AMAT: degree=15
+6. HPQ: degree=10
+7. ARNC: degree=7
+8. F: degree=4
+9. AAPL: degree=4
+10. AES: degree=4
+11. RF: degree=4
+12. NWS: degree=4
+13. FITB: degree=3
+14. CTL: degree=3
+15. GLW: degree=3
+16. PBCT: degree=3
+17. DISCA: degree=3
+18. DHI: degree=3
+19. MSFT: degree=3
+20. FCX: degree=3
+Saved deepcnl graph for 2015: 169 nodes, 220 edges
+Computing PCC for 2015...
+[Pearson correlation coefficients on time series tuples with (coefficient, p-value)]
+
+[Top 20 nodes by degree]
+1. BEN: degree=19
+2. MUR: degree=15
+3. NAVI: degree=14
+4. MON: degree=12
+5. MRO: degree=12
+6. UTX: degree=12
+7. FLS: degree=11
+8. FMC: degree=10
+9. MJN: degree=10
+10. DVN: degree=9
+11. APA: degree=9
+12. SNI: degree=9
+13. FLR: degree=9
+14. IP: degree=8
+15. EMR: degree=8
+16. TSS: degree=7
+17. FISV: degree=7
+18. PH: degree=7
+19. SPLS: degree=7
+20. AMZN: degree=6
+Saved pcc graph for 2015: 120 nodes, 220 edges
+
+======================================================================
+Year 2016 (seed=6)
+======================================================================
+📥 Loading input data...
+📅 Period: 2016-01-01 to 2016-12-31
+📊 Total rows in period: 126125
+📊 Available tickers in date range: 501
+📅 Total trading days: 252
+📅 Required timesteps (after window alignment): 224
+✅ Tickers with ≥80% data coverage: 500
+🎯 Using 470 tickers (requested 470)
+📦 Data shape validation:
+   Expected: 470 × 224 × 4 = 421120
+   Actual: 421120
+🔗 Generating 110215 pairwise combinations from 470 tickers
+📥 Loading target data...
+📊 Total rows for target: 252
+📊 Daily sum data type: float64
+📊 Daily sum shape: 252
+📊 Total daily returns: 252
+📊 Final target labels: 192 (after window alignment)
+
+Training DeepCNL for 2016...
+[DeepCNL]
+🔧 Initializing model with 470 tickers (originally requested 12)
+🚀 Starting model training...
+📊 Training data shape: torch.Size([110215, 8, 224])
+📊 Target labels: 192
+  Epoch   0: loss = 0.918449
+  Epoch  10: loss = 0.895292
+  Epoch  20: loss = 0.865391
+  Epoch  30: loss = 0.845474
+  Epoch  40: loss = 0.829062
+  Epoch  50: loss = 0.816444
+  Epoch  60: loss = 0.805653
+  Epoch  70: loss = 0.788264
+  Epoch  80: loss = 0.774748
+  Epoch  90: loss = 0.764560
+  Epoch 100: loss = 0.754423
+  Epoch 110: loss = 0.743682
+  Epoch 120: loss = 0.737473
+  Epoch 130: loss = 0.730599
+  Epoch 140: loss = 0.725930
+  Epoch 150: loss = 0.721308
+  Epoch 160: loss = 0.716520
+  Epoch 170: loss = 0.712441
+  Epoch 180: loss = 0.707515
+  Epoch 190: loss = 0.703287
+✅ Model training completed and saved
+
+[Top 20 nodes by degree]
+1. BAC: degree=46
+2. MRO: degree=31
+3. CHK: degree=25
+4. PFE: degree=25
+5. PG: degree=13
+6. MU: degree=9
+7. F: degree=8
+8. T: degree=7
+9. GE: degree=7
+10. COTY: degree=6
+11. FCX: degree=6
+12. RF: degree=6
+13. KMI: degree=6
+14. HBAN: degree=5
+15. CBG: degree=5
+16. SWN: degree=5
+17. PCLN: degree=5
+18. RIG: degree=4
+19. SPLS: degree=4
+20. KEY: degree=4
+Saved deepcnl graph for 2016: 176 nodes, 220 edges
+Computing PCC for 2016...
+[Pearson correlation coefficients on time series tuples with (coefficient, p-value)]
+
+[Top 20 nodes by degree]
+1. MCHP: degree=13
+2. FIS: degree=13
+3. SPGI: degree=12
+4. DGX: degree=12
+5. MTD: degree=11
+6. AMAT: degree=11
+7. TXN: degree=11
+8. BDX: degree=11
+9. AFL: degree=10
+10. HPE: degree=9
+11. IDXX: degree=9
+12. SWK: degree=9
+13. LNT: degree=8
+14. HPQ: degree=8
+15. PLD: degree=8
+16. EFX: degree=8
+17. PNW: degree=7
+18. SCG: degree=7
+19. CHTR: degree=7
+20. CMS: degree=7
+Saved pcc graph for 2016: 129 nodes, 220 edges
+
+======================================================================
+PHASE 0 COMPLETE — Saved graphs for 7/7 years
+Output: /home/others/CS60078_P6/ayush/Deep-Co-investment-Network-Learning-for-Financial-Assets/outputs/graphs/
+======================================================================
+
+Time elapsed: 1601.9s
+========================================
+Finished: Saturday 04 April 2026 06:01:59 PM IST
+========================================
