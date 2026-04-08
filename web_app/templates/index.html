@@ -1,19 +1,65 @@
 <!-- templates/index.html -->
 {% extends "base.html" %}
 
+{% block title %}Overview — Regime-Aware Portfolio Optimization{% endblock %}
+
 {% block content %}
+<!-- Hero -->
 <div class="hero-section">
     <div class="container text-center">
-        <h1 class="display-4 fw-bold">DeepCNL</h1>
-        <h2 class="h3 mb-4" style="color: #ffffff;">A Graph-Based Approach for Co-investment Learning</h2>
-        <p class="lead">
-            Models the S&P 500 as a dynamic "co-investment network" to predict top-performing stocks, 
-            moving beyond traditional correlation methods using deep learning and graph neural networks.
+        <h1 class="display-4 fw-bold">Regime-Aware Portfolio Optimization</h1>
+        <h2 class="h4 mb-3" style="color: rgba(255,255,255,0.85);">using Deep Co-investment Networks</h2>
+        <p class="lead" style="max-width:820px;margin:auto;">
+            Models the S&amp;P 500 as a dynamic <em>co-investment network</em> via deep learning,
+            detects market regimes from graph topology, and builds an adaptive portfolio
+            that switches strategies based on regime state — all evaluated over 2010-2016.
         </p>
     </div>
 </div>
 
+<!-- ===== Primary KPI Row ===== -->
 <div class="container my-5">
+    <div class="row g-4">
+        <!-- Regime-Aware Sharpe -->
+        <div class="col-md-3">
+            <div class="kpi-card border-start border-4 border-success">
+                <div class="kpi-value text-success">{{ "%.2f"|format(kpis.regime_sharpe) }}</div>
+                <div class="kpi-label">Regime-Aware Sharpe</div>
+                <div class="kpi-subtitle">Adaptive strategy risk-adjusted return</div>
+            </div>
+        </div>
+
+        <!-- Hub-Follow Cumulative Return -->
+        <div class="col-md-3">
+            <div class="kpi-card border-start border-4 border-primary">
+                <div class="kpi-value text-primary">+{{ "%.1f"|format(kpis.hub_follow_return * 100) }}%</div>
+                <div class="kpi-label">Hub-Follow Return</div>
+                <div class="kpi-subtitle">Highest cumulative wealth (2011-16)</div>
+            </div>
+        </div>
+
+        <!-- Regime Detection Accuracy -->
+        <div class="col-md-3">
+            <div class="kpi-card border-start border-4 border-warning">
+                <div class="kpi-value" style="color:var(--warning-color);">{{ kpis.regime_matches }}/{{ kpis.regime_total }}</div>
+                <div class="kpi-label">Regime Detection</div>
+                <div class="kpi-subtitle">Years matching known market events</div>
+            </div>
+        </div>
+
+        <!-- Hub-Avoid Max Drawdown -->
+        <div class="col-md-3">
+            <div class="kpi-card border-start border-4 border-danger">
+                <div class="kpi-value text-danger">{{ "%.2f"|format(kpis.hub_avoid_drawdown * 100) }}%</div>
+                <div class="kpi-label">Hub-Avoid Max Drawdown</div>
+                <div class="kpi-subtitle">Safest strategy drawdown</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== Secondary KPI Row (DeepCNL specific) ===== -->
+<div class="container mb-5">
     <div class="row g-4">
         <div class="col-md-4">
             <div class="kpi-card">
@@ -32,27 +78,81 @@
         <div class="col-md-4">
             <div class="kpi-card">
                 <div class="kpi-value">{{ "%.1f"|format(kpis.benchmark_improvement) }}x</div>
-                <div class="kpi-label">Benchmark Comparison</div>
-                <div class="kpi-subtitle">Outperforms PCC Baseline</div>
+                <div class="kpi-label">vs. PCC Baseline</div>
+                <div class="kpi-subtitle">Market Cap advantage over correlation method</div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-6">
+<!-- ===== Three-Pillar Feature Cards ===== -->
+<div class="container mb-5">
+    <h3 class="text-center mb-4 fw-bold" style="color:var(--primary-color);">Three-Stage Pipeline</h3>
+    <div class="row g-4">
+        <!-- 1. Co-investment Network -->
+        <div class="col-md-4">
             <div class="feature-card">
-                <h3><i class="fas fa-project-diagram"></i> Network Learning</h3>
-                <p>Extract co-investment relationships from LSTM weights to construct dynamic financial networks that evolve over time.</p>
-                <a href="{{ url_for('network') }}" class="btn btn-primary">Explore Networks</a>
+                <h3><i class="fas fa-project-diagram"></i> Co-investment Networks</h3>
+                <p>
+                    An LSTM-based model learns shared latent weight structures across S&amp;P 500 stocks.
+                    These hidden connections form a yearly <strong>co-investment graph</strong> that reveals
+                    how institutional portfolios move together — far richer than simple price correlations.
+                </p>
+                <a href="{{ url_for('network') }}" class="btn btn-primary"><i class="fas fa-search"></i> Explore Networks</a>
+            </div>
+        </div>
+
+        <!-- 2. Regime Detection -->
+        <div class="col-md-4">
+            <div class="feature-card">
+                <h3><i class="fas fa-wave-square"></i> Regime Detection</h3>
+                <p>
+                    Graph-theoretic features (density, clustering, path length, assortativity, entropy)
+                    are extracted each year and fed to a <strong>Hidden Markov Model</strong> to classify the market
+                    into Bull, Crisis, or Recovery regimes — matched {{ kpis.regime_matches }}/{{ kpis.regime_total }} known events.
+                </p>
+                <a href="{{ url_for('regime') }}" class="btn btn-primary"><i class="fas fa-chart-area"></i> View Regimes</a>
+            </div>
+        </div>
+
+        <!-- 3. Adaptive Portfolio -->
+        <div class="col-md-4">
+            <div class="feature-card">
+                <h3><i class="fas fa-wallet"></i> Adaptive Portfolio</h3>
+                <p>
+                    The <strong>regime-aware strategy</strong> dynamically switches between hub-follow (growth)
+                    and hub-avoid (defensive) centrality-based portfolios depending on the detected regime.
+                    Backtested against S&amp;P 500 equal-weight and PCC baselines from 2011 to 2016.
+                </p>
+                <a href="{{ url_for('portfolio') }}" class="btn btn-primary"><i class="fas fa-chart-line"></i> View Backtest</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== Quick-access row to remaining pages ===== -->
+<div class="container mb-5">
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="feature-card" style="border-left:4px solid var(--secondary-color);">
+                <h3><i class="fas fa-trophy"></i> Stock Rankings & Predictions</h3>
+                <p>
+                    See the top-10 performing S&amp;P 500 stocks each year and how accurately DeepCNL
+                    predicted them, with an average hit ratio of {{ "%.0f"|format(kpis.hit_ratio) }}%.
+                </p>
+                <a href="{{ url_for('rankings') }}" class="btn btn-outline-primary">View Rankings &rarr;</a>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="feature-card">
-                <h3><i class="fas fa-chart-line"></i> Stock Prediction</h3>
-                <p>Identify top-performing stocks using graph-based features that capture market structure and investor behavior.</p>
-                <a href="{{ url_for('rankings') }}" class="btn btn-primary">View Rankings</a>
+            <div class="feature-card" style="border-left:4px solid var(--accent-color);">
+                <h3><i class="fas fa-balance-scale"></i> Performance Benchmarks</h3>
+                <p>
+                    DeepCNL's top-ranked firms have an average market cap of
+                    <strong>${{ "%.0f"|format(kpis.market_cap) }}B</strong>, roughly
+                    {{ "%.1f"|format(kpis.benchmark_improvement) }}× higher than the PCC baseline — a sign
+                    the model captures genuine financial influence rather than noise.
+                </p>
+                <a href="{{ url_for('rankings') }}" class="btn btn-outline-primary">Compare &rarr;</a>
             </div>
         </div>
     </div>

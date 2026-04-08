@@ -38,10 +38,22 @@ NETWORK_DATA, RANKINGS_DATA, PERFORMANCE_DATA, REGIME_DATA, PORTFOLIO_DATA = loa
 @app.route('/')
 def index():
     """Landing page with key performance indicators"""
+    # Pull real metrics from the precomputed data
+    pm = PORTFOLIO_DATA.get('summary_metrics', {})
+    regime_val = REGIME_DATA.get('validation', {})
+
     kpis = {
         'hit_ratio': 57.14,
         'market_cap': 223.1,
-        'benchmark_improvement': 3.3
+        'benchmark_improvement': 3.3,
+        # Regime-aware extras
+        'regime_sharpe': pm.get('regime_aware', {}).get('sharpe', 0),
+        'regime_return': pm.get('regime_aware', {}).get('cumulative_return', 0),
+        'sp500_sharpe': pm.get('sp500_equal_weight', {}).get('sharpe', 0),
+        'hub_avoid_drawdown': pm.get('deepcnl_hub_avoid', {}).get('max_drawdown', 0),
+        'hub_follow_return': pm.get('deepcnl_hub_follow', {}).get('cumulative_return', 0),
+        'regime_matches': regime_val.get('matches', 0),
+        'regime_total': regime_val.get('total_years', 0),
     }
     return render_template('index.html', kpis=kpis)
 

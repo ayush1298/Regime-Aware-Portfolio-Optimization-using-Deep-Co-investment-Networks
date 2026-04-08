@@ -1,4 +1,4 @@
-// static/js/network_viz.js
+// static/js/network_vis.js
 class NetworkVisualization {
     constructor() {
         this.svg = null;
@@ -6,6 +6,8 @@ class NetworkVisualization {
         this.currentData = null;
         this.width = 0;
         this.height = 0;
+        this.zoom = null;
+        this.mainGroup = null;   // parent <g> that receives zoom transforms
         this.init();
         this.bindEvents();
     }
@@ -20,6 +22,7 @@ class NetworkVisualization {
             .attr('width', this.width)
             .attr('height', this.height);
 
+        // Arrow-head marker definition (lives outside the zoom group)
         this.svg.append('defs').append('marker')
             .attr('id', 'arrowhead')
             .attr('viewBox', '-0 -5 10 10')
@@ -33,6 +36,18 @@ class NetworkVisualization {
             .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
             .attr('fill', '#999')
             .style('stroke', 'none');
+
+        // ----- d3.zoom setup -----
+        this.zoom = d3.zoom()
+            .scaleExtent([0.15, 6])
+            .on('zoom', (event) => {
+                this.mainGroup.attr('transform', event.transform);
+            });
+
+        this.svg.call(this.zoom);
+
+        // Primary <g> that holds ALL visual elements – zoomed uniformly
+        this.mainGroup = this.svg.append('g').attr('class', 'main-group');
 
         this.loadNetworkData(2012);
     }
@@ -50,6 +65,21 @@ class NetworkVisualization {
             if (e.key === 'Enter') {
                 this.searchStock();
             }
+        });
+
+        // ---- Zoom button listeners ----
+        document.getElementById('zoomInBtn').addEventListener('click', () => {
+            this.svg.transition().duration(350).call(this.zoom.scaleBy, 1.4);
+        });
+
+        document.getElementById('zoomOutBtn').addEventListener('click', () => {
+            this.svg.transition().duration(350).call(this.zoom.scaleBy, 0.7);
+        });
+
+        document.getElementById('zoomResetBtn').addEventListener('click', () => {
+            this.svg.transition().duration(500).call(
+                this.zoom.transform, d3.zoomIdentity
+            );
         });
     }
 
@@ -69,9 +99,23 @@ class NetworkVisualization {
     }
 
     renderNetwork(data) {
-        this.svg.selectAll('*').remove();
+        // Clear only the main group content (preserves defs & zoom binding)
+        this.mainGroup.selectAll('*').remove();
 
-        // Create scales
+        // Reset zoom transform
+        this.svg.call(this.zoom.transform, d3.zoomIdentity);
+
+        // ---- Populate the datalist for autocomplete ----
+        const datalist = document.getElementById('stockList');
+        datalist.innerHTML = '';
+        data.nodes.forEach(n => {
+            const opt = document.createElement('option');
+            opt.value = n.id;
+            opt.label = n.name || n.id;
+            datalist.appendChild(opt);
+        });
+
+        // Scales
         const linkScale = d3.scaleLinear()
             .domain(d3.extent(data.links, d => d.weight))
             .range([1, 8]);
@@ -80,14 +124,14 @@ class NetworkVisualization {
             .domain(d3.extent(data.nodes, d => d.degree))
             .range([5, 20]);
 
-        // Create force simulation
+        // Force simulation
         this.simulation = d3.forceSimulation(data.nodes)
             .force('link', d3.forceLink(data.links).id(d => d.id).distance(100))
             .force('charge', d3.forceManyBody().strength(-300))
             .force('center', d3.forceCenter(this.width / 2, this.height / 2));
 
-        // Create links
-        const link = this.svg.append('g')
+        // Links – inside mainGroup
+        const link = this.mainGroup.append('g')
             .attr('class', 'links')
             .selectAll('line')
             .data(data.links)
@@ -96,8 +140,8 @@ class NetworkVisualization {
             .attr('stroke', '#999')
             .attr('stroke-opacity', 0.6);
 
-        // Create nodes
-        const node = this.svg.append('g')
+        // Nodes – inside mainGroup
+        const node = this.mainGroup.append('g')
             .attr('class', 'nodes')
             .selectAll('circle')
             .data(data.nodes)
@@ -109,24 +153,24 @@ class NetworkVisualization {
                 .on('drag', (event, d) => this.dragged(event, d))
                 .on('end', (event, d) => this.dragended(event, d)));
 
-        // Add labels
-        const labels = this.svg.append('g')
+        // Labels – inside mainGroup
+        const labels = this.mainGroup.append('g')
             .attr('class', 'labels')
             .selectAll('text')
-            .data(data.nodes.filter(d => d.degree > 10)) // Only show labels for high-degree nodes
+            .data(data.nodes.filter(d => d.degree > 10))
             .enter().append('text')
             .text(d => d.id)
             .attr('font-size', '10px')
             .attr('text-anchor', 'middle')
             .attr('dy', '.35em');
 
-        // Add click events
+        // Click handler
         node.on('click', (event, d) => {
             this.showStockInfo(d);
             this.highlightNode(d);
         });
 
-        // Update positions on simulation tick
+        // Tick
         this.simulation.on('tick', () => {
             link
                 .attr('x1', d => d.source.x)
@@ -145,9 +189,9 @@ class NetworkVisualization {
     }
 
     getNodeColor(node) {
-        if (node.degree > 20) return '#e74c3c'; // High degree - red
-        if (node.degree > 10) return '#f39c12'; // Medium degree - orange
-        return '#3498db'; // Low degree - blue
+        if (node.degree > 20) return '#e74c3c';
+        if (node.degree > 10) return '#f39c12';
+        return '#3498db';
     }
 
     showStockInfo(node) {
@@ -174,7 +218,7 @@ class NetworkVisualization {
     }
 
     highlightNode(selectedNode) {
-        this.svg.selectAll('circle')
+        this.mainGroup.selectAll('circle')
             .attr('stroke', d => d.id === selectedNode.id ? '#2c3e50' : 'none')
             .attr('stroke-width', d => d.id === selectedNode.id ? 3 : 0);
     }
@@ -197,15 +241,15 @@ class NetworkVisualization {
             this.showStockInfo(data);
             this.highlightNode(data);
             
-            // Center the view on the selected node
-            const node = this.svg.selectAll('circle').data().find(d => d.id === ticker);
-            if (node) {
+            // Center on the found node using the zoom behaviour
+            const nodeData = this.mainGroup.selectAll('circle').data().find(d => d.id === ticker);
+            if (nodeData) {
                 const transform = d3.zoomIdentity
-                    .translate(this.width / 2 - node.x, this.height / 2 - node.y)
+                    .translate(this.width / 2 - nodeData.x * 1.5, this.height / 2 - nodeData.y * 1.5)
                     .scale(1.5);
                 
                 this.svg.transition().duration(750).call(
-                    d3.zoom().transform, transform
+                    this.zoom.transform, transform
                 );
             }
         } catch (error) {

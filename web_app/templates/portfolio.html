@@ -181,7 +181,18 @@
     new Chart(sCtx, {
         type: 'bar',
         data: {
-            labels: stratKeys.map(k => portData.summary_metrics[k].name.split(' ')[0]),
+            labels: stratKeys.map(k => {
+                const full = portData.summary_metrics[k].name;
+                // Build readable short labels that avoid duplicates
+                const shortNames = {
+                    'deepcnl_hub_avoid': 'Hub-Avoid',
+                    'deepcnl_hub_follow': 'Hub-Follow',
+                    'pcc_hub_avoid': 'PCC',
+                    'sp500_equal_weight': 'S&P',
+                    'regime_aware': 'Regime-Aware'
+                };
+                return shortNames[k] || full;
+            }),
             datasets: [{
                 label: 'Sharpe Ratio',
                 data: stratKeys.map(k => portData.summary_metrics[k].sharpe),

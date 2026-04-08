@@ -181,3 +181,40 @@ body {
         height: 400px;
     }
 }
+
+/* ---- Zoom controls overlay ---- */
+.zoom-controls {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+}
+
+.zoom-controls .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid rgba(0,0,0,0.12);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+    background: white;
+    transition: background 0.15s, transform 0.15s;
+}
+
+.zoom-controls .btn:hover {
+    background: #e9ecef;
+    transform: scale(1.08);
+}
+
+/* Chart containers need flex layout so canvas fills height */
+.chart-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-container canvas {
+    flex: 1 1 auto;
+    min-height: 0;
+}
