@@ -81,8 +81,9 @@ body {
 .network-container {
     background: white;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    height: 600px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    height: calc(100vh - 120px);
     position: relative;
 }
 
