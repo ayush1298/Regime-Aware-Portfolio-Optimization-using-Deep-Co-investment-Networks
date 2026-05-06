@@ -140,6 +140,7 @@
                     backgroundColor: colors,
                     borderWidth: 0,
                     borderRadius: 5,
+                    pointStyle: 'rectRounded',
                     yAxisID: 'y'
                 },
                 {
@@ -147,13 +148,14 @@
                     data: networkDensity,
                     type: 'line',
                     borderColor: '#1e3a8a', // Dark Navy
-                    backgroundColor: '#1e3a8a',
+                    backgroundColor: 'transparent',
                     borderWidth: 4,
                     pointBackgroundColor: '#ffffff',
                     pointBorderColor: '#1e3a8a',
                     pointBorderWidth: 2,
                     pointRadius: 5,
                     pointHoverRadius: 7,
+                    pointStyle: 'line',
                     yAxisID: 'y1'
                 },
                 {
@@ -161,7 +163,7 @@
                     data: sp500Returns,
                     type: 'line',
                     borderColor: '#0f172a', // Almost Black
-                    backgroundColor: '#0f172a',
+                    backgroundColor: 'transparent',
                     borderWidth: 4,
                     borderDash: [8, 4],
                     pointBackgroundColor: '#ffffff',
@@ -169,6 +171,7 @@
                     pointBorderWidth: 2,
                     pointRadius: 5,
                     pointHoverRadius: 7,
+                    pointStyle: 'line',
                     hidden: true,
                     yAxisID: 'y2'
                 }
@@ -178,7 +181,13 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'bottom' },
+                legend: { 
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        boxWidth: 40
+                    }
+                },
                 tooltip: {
                     callbacks: {
                         label: function(ctx) {
