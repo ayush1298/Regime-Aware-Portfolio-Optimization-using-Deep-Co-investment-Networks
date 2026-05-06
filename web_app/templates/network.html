@@ -9,11 +9,16 @@
             
             <div class="mb-3">
                 <label for="yearSelect" class="form-label">Year</label>
-                <select class="form-select" id="yearSelect">
-                    {% for year in years %}
-                    <option value="{{ year }}" {% if year == 2012 %}selected{% endif %}>{{ year }}</option>
-                    {% endfor %}
-                </select>
+                <div class="input-group">
+                    <select class="form-select" id="yearSelect">
+                        {% for year in years %}
+                        <option value="{{ year }}" {% if year == 2012 %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                    <button id="playBtn" class="btn btn-primary" title="Play Time-Lapse">
+                        <i class="fas fa-play"></i> Play
+                    </button>
+                </div>
             </div>
             
             <div class="mb-3">

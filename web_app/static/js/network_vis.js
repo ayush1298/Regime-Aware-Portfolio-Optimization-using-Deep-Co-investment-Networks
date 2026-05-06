@@ -81,6 +81,34 @@ class NetworkVisualization {
                 this.zoom.transform, d3.zoomIdentity
             );
         });
+
+        // ---- Time-Lapse Play Button ----
+        let playInterval = null;
+        const playBtn = document.getElementById('playBtn');
+        if (playBtn) {
+            playBtn.addEventListener('click', () => {
+                if (playInterval) {
+                    clearInterval(playInterval);
+                    playInterval = null;
+                    playBtn.innerHTML = '<i class="fas fa-play"></i> Play Time-Lapse';
+                    playBtn.classList.remove('btn-danger');
+                    playBtn.classList.add('btn-primary');
+                } else {
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+                    playBtn.classList.remove('btn-primary');
+                    playBtn.classList.add('btn-danger');
+                    playInterval = setInterval(() => {
+                        const select = document.getElementById('yearSelect');
+                        let nextIndex = select.selectedIndex + 1;
+                        if (nextIndex >= select.options.length) {
+                            nextIndex = 0; // loop back
+                        }
+                        select.selectedIndex = nextIndex;
+                        this.loadNetworkData(parseInt(select.value));
+                    }, 2000); // 2 second transition
+                }
+            });
+        }
     }
 
     async loadNetworkData(year) {
@@ -164,7 +192,19 @@ class NetworkVisualization {
             .attr('text-anchor', 'middle')
             .attr('dy', '.35em');
 
-        // Click handler
+        // Hover handler
+        node.on('mouseover', (event, d) => {
+            this.showStockInfo(d);
+            this.highlightNode(d);
+        })
+        .on('mouseout', (event, d) => {
+            // Remove highlight on mouseout
+            this.mainGroup.selectAll('circle')
+                .attr('stroke', 'none')
+                .attr('stroke-width', 0);
+        });
+
+        // Click handler (can optionally lock selection, but keeping it simple for hover)
         node.on('click', (event, d) => {
             this.showStockInfo(d);
             this.highlightNode(d);
@@ -189,9 +229,15 @@ class NetworkVisualization {
     }
 
     getNodeColor(node) {
-        if (node.degree > 20) return '#e74c3c';
-        if (node.degree > 10) return '#f39c12';
-        return '#3498db';
+        const sectorColors = {
+            'Financials': '#e74c3c', // Red
+            'Technology': '#3498db', // Blue
+            'Energy': '#2c3e50', // Dark/Blackish
+            'Healthcare': '#2ecc71', // Green
+            'Consumer': '#f1c40f', // Yellow
+            'Industrials': '#95a5a6' // Gray
+        };
+        return sectorColors[node.sector] || '#bdc3c7'; // Default gray if sector missing
     }
 
     showStockInfo(node) {
@@ -202,8 +248,12 @@ class NetworkVisualization {
         nameDiv.textContent = `${node.name} (${node.id})`;
         
         let detailsHTML = `
+            <p><strong>Sector:</strong> <span style="color:${this.getNodeColor(node)}">${node.sector || 'N/A'}</span></p>
             <p><strong>Degree:</strong> ${node.degree}</p>
             <p><strong>Market Cap:</strong> $${(node.market_cap / 1000).toFixed(1)}B</p>
+            <p><strong>Betweenness:</strong> ${node.betweenness ? node.betweenness.toFixed(4) : 'N/A'}</p>
+            <p><strong>Eigenvector:</strong> ${node.eigenvector ? node.eigenvector.toFixed(4) : 'N/A'}</p>
+            <p><strong>Classification:</strong> ${node.classification || 'N/A'}</p>
             <h6>Top Connections:</h6>
             <ul>
         `;

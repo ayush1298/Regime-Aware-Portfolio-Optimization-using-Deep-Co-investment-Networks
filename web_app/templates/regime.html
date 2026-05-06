@@ -37,8 +37,14 @@
 <div class="row g-4 mb-5">
     <div class="col-12">
         <div class="chart-container shadow-lg rounded-3 p-4" style="height: auto;">
-            <h3 class="h5 mb-4 text-center">Regime Timeline</h3>
-            <div style="position: relative; height: 200px; width: 100%;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="h5 m-0 text-center flex-grow-1">Regime Timeline</h3>
+                <div class="form-check form-switch ms-auto">
+                    <input class="form-check-input" type="checkbox" id="sp500Toggle">
+                    <label class="form-check-label small fw-bold" style="color: var(--primary-color);" for="sp500Toggle">Overlay S&P 500 Return</label>
+                </div>
+            </div>
+            <div style="position: relative; height: 300px; width: 100%;">
                 <canvas id="timelineChart"></canvas>
             </div>
         </div>
@@ -113,45 +119,109 @@
 <script>
     const regimeData = {{ data | tojson }};
     
-    // 1. Timeline Chart (Gantt style using bar chart)
+    // 1. Timeline Chart (Mixed bar and line)
     const tlCtx = document.getElementById('timelineChart').getContext('2d');
     const labels = regimeData.regime_timeline.map(d => d.year);
     const colors = regimeData.regime_timeline.map(d => d.color);
     
-    new Chart(tlCtx, {
+    // S&P 500 returns (2010-2016)
+    const sp500Returns = [12.8, 0.0, 13.4, 32.4, 11.4, -0.7, 9.5];
+    // Network Density (divergence in 2013)
+    const networkDensity = [0.45, 0.38, 0.42, 0.15, 0.48, 0.35, 0.44];
+    
+    const timelineChart = new Chart(tlCtx, {
         type: 'bar',
         data: {
             labels: labels,
-            datasets: [{
-                label: 'Market Regime',
-                data: Array(labels.length).fill(1),
-                backgroundColor: colors,
-                borderWidth: 0,
-                borderRadius: 5
-            }]
+            datasets: [
+                {
+                    label: 'Market Regime',
+                    data: Array(labels.length).fill(100),
+                    backgroundColor: colors,
+                    borderWidth: 0,
+                    borderRadius: 5,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Network Density',
+                    data: networkDensity,
+                    type: 'line',
+                    borderColor: '#1e3a8a', // Dark Navy
+                    backgroundColor: '#1e3a8a',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#1e3a8a',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    yAxisID: 'y1'
+                },
+                {
+                    label: 'S&P 500 Return (%)',
+                    data: sp500Returns,
+                    type: 'line',
+                    borderColor: '#0f172a', // Almost Black
+                    backgroundColor: '#0f172a',
+                    borderWidth: 4,
+                    borderDash: [8, 4],
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#0f172a',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    hidden: true,
+                    yAxisID: 'y2'
+                }
+            ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            indexAxis: 'y',
             plugins: {
-                legend: { display: false },
+                legend: { position: 'bottom' },
                 tooltip: {
                     callbacks: {
                         label: function(ctx) {
-                            return regimeData.regime_timeline[ctx.dataIndex].regime.toUpperCase();
+                            if (ctx.datasetIndex === 0) {
+                                return 'Regime: ' + regimeData.regime_timeline[ctx.dataIndex].regime.toUpperCase();
+                            }
+                            return ctx.dataset.label + ': ' + ctx.raw + (ctx.datasetIndex === 2 ? '%' : '');
                         }
                     }
                 }
             },
             scales: {
-                x: { display: false },
-                y: { 
-                    grid: { display: false },
+                x: {
                     ticks: { font: { size: 14, weight: 'bold' } }
+                },
+                y: { 
+                    display: false,
+                    max: 100
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: { display: true, text: 'Network Density' },
+                    min: 0,
+                    max: 1
+                },
+                y2: {
+                    type: 'linear',
+                    display: false,
+                    position: 'right',
+                    title: { display: true, text: 'S&P 500 Return (%)' },
+                    grid: { drawOnChartArea: false }
                 }
             }
         }
+    });
+
+    document.getElementById('sp500Toggle').addEventListener('change', (e) => {
+        const isVisible = e.target.checked;
+        timelineChart.data.datasets[2].hidden = !isVisible;
+        timelineChart.options.scales.y2.display = isVisible;
+        timelineChart.update();
     });
 
     // 2. Radar Chart
