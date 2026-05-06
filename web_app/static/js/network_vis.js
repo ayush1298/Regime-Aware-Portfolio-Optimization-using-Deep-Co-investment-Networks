@@ -109,6 +109,14 @@ class NetworkVisualization {
                 }
             });
         }
+
+        // ---- Edge Weights Toggle ----
+        const edgeWeightToggle = document.getElementById('showEdgeWeights');
+        if (edgeWeightToggle) {
+            edgeWeightToggle.addEventListener('change', (e) => {
+                this.mainGroup.selectAll('.edge-labels').style('display', e.target.checked ? 'block' : 'none');
+            });
+        }
     }
 
     async loadNetworkData(year) {
@@ -168,6 +176,21 @@ class NetworkVisualization {
             .attr('stroke', '#999')
             .attr('stroke-opacity', 0.6);
 
+        // Edge Labels
+        const edgeLabelsGroup = this.mainGroup.append('g')
+            .attr('class', 'edge-labels')
+            .style('display', document.getElementById('showEdgeWeights') && document.getElementById('showEdgeWeights').checked ? 'block' : 'none');
+
+        const edgeLabels = edgeLabelsGroup.selectAll('text')
+            .data(data.links)
+            .enter().append('text')
+            .attr('font-size', '10px')
+            .attr('fill', '#e74c3c')
+            .attr('font-weight', 'bold')
+            .attr('text-anchor', 'middle')
+            .attr('dy', -4)
+            .text(d => d.weight.toFixed(2));
+
         // Nodes – inside mainGroup
         const node = this.mainGroup.append('g')
             .attr('class', 'nodes')
@@ -225,6 +248,21 @@ class NetworkVisualization {
             labels
                 .attr('x', d => d.x)
                 .attr('y', d => d.y);
+                
+            edgeLabels
+                .attr('x', d => (d.source.x + d.target.x) / 2)
+                .attr('y', d => (d.source.y + d.target.y) / 2)
+                // Add rotation to make text align with the line
+                .attr('transform', d => {
+                    const dx = d.target.x - d.source.x;
+                    const dy = d.target.y - d.source.y;
+                    let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                    // Keep text upright
+                    if (angle > 90 || angle < -90) {
+                        angle += 180;
+                    }
+                    return `rotate(${angle}, ${(d.source.x + d.target.x) / 2}, ${(d.source.y + d.target.y) / 2})`;
+                });
         });
     }
 
